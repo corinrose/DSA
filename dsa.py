@@ -33,7 +33,7 @@ def gen_param(N = 160, L = 1024):
 
     i = 2**1024
     p = getrandbits(L)
-    while not(is_prime(p)) and not(p.bit_length == L):
+    while not(is_prime(p)):
         i += 1
         p = q*i + 1
 
@@ -43,7 +43,6 @@ def gen_param(N = 160, L = 1024):
 
 def hashint(m):
     m = m.to_bytes(m.bit_length(), byteorder='big')
-    print(m)
     m = sha256(m).digest()
     m = int.from_bytes(m, byteorder='big')
     return m
@@ -64,13 +63,12 @@ def sign(q, p, g, privkey, message):
     k = randint(0, q)
     r = pow(g, k, p) % q
     s = (invert(k, q) * (hashint(message) + privkey*r)) % q
-    print("test", k, hashint(message)*invert(s, q) + privkey*r*invert(s,q))
     return (r, s)
  
 def verify(q, p, g, pubkey, r, s, message):
     w = invert(s, q)
     u1 = hashint(message)*w % q
     u2 = r*w % q
-    v = pow(g, u1, p)*pow(pubkey, u2, p) % q
+    v = (pow(g, u1)*pow(pubkey, u2) % p) % q
     return v == r
 

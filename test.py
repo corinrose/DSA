@@ -1,9 +1,8 @@
-from codecs import encode, decode
-from dsa import gen_param, gen_keypair, sign, verify, q, p, g
+from dsa import gen_param, gen_keypair, sign, verify
 
-#q, p, g = gen_param()
-
-print(q, p ,g)
+q = 251
+p = 503
+g = 4
 
 message = 256
 
