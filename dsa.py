@@ -31,8 +31,8 @@ def gen_param(N = 160, L = 1024):
     while not(is_prime(q)):
         q = getrandbits(N)
 
-    i = 2**1024
-    p = getrandbits(L)
+    i = 2**L
+    p = 0
     while not(is_prime(p)):
         i += 1
         p = q*i + 1
@@ -41,10 +41,11 @@ def gen_param(N = 160, L = 1024):
 
     return q, p, g
 
-def hashint(m):
-    m = m.to_bytes(m.bit_length(), byteorder='big')
+def hash(m):
+    #m = m.to_bytes(m.bit_length(), byteorder='big')
+    m = bin(m)
     m = sha256(m).digest()
-    m = int.from_bytes(m, byteorder='big')
+    m = int(m, 2)
     return m
  
 # only works for prime modulus, which is all that's needed for DSA
@@ -62,13 +63,14 @@ def gen_keypair(q, p, g):
 def sign(q, p, g, privkey, message):
     k = randint(0, q)
     r = pow(g, k, p) % q
-    s = (invert(k, q) * (hashint(message) + privkey*r)) % q
+    s = (invert(k, q) * (hash(message) + privkey*r)) % q
     return (r, s)
  
 def verify(q, p, g, pubkey, r, s, message):
     w = invert(s, q)
-    u1 = hashint(message)*w % q
+    u1 = hash(message)*w % q
     u2 = r*w % q
-    v = (pow(g, u1)*pow(pubkey, u2) % p) % q
+    print("hello")
+    v = (pow(g, u1, p)*pow(pubkey, u2, p) % p) % q
     return v == r
 
