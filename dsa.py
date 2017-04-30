@@ -42,10 +42,9 @@ def gen_param(N = 160, L = 1024):
     return q, p, g
 
 def hash(m):
-    #m = m.to_bytes(m.bit_length(), byteorder='big')
     m = bin(m)
-    m = sha256(m).digest()
-    m = int(m, 2)
+    m = sha256(m).hexdigest()
+    m = int(m, 16)
     return m
  
 # only works for prime modulus, which is all that's needed for DSA
@@ -70,7 +69,6 @@ def verify(q, p, g, pubkey, r, s, message):
     w = invert(s, q)
     u1 = hash(message)*w % q
     u2 = r*w % q
-    print("hello")
     v = (pow(g, u1, p)*pow(pubkey, u2, p) % p) % q
     return v == r
 
