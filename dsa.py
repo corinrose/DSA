@@ -19,7 +19,6 @@
 from hashlib import sha256
 from codecs import encode
 from random import getrandbits, randint
-#from gmpy2 import is_prime
 from miller_rabin import isPrime
 
 q = 251
@@ -43,8 +42,11 @@ def gen_param(N = 160, L = 1024):
     return q, p, g
 
 def hash(m):
+    # sha256 takes in binary, so we have to convert our int
     m = bin(m)
     m = sha256(m).hexdigest()
+    # now our m is a string that represents a hexadecimal number,
+    # luckily python has a nice way to convert that to a decimal int
     m = int(m, 16)
     return m
  
