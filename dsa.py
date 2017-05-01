@@ -43,6 +43,9 @@ def gen_param(N = 160, L = 1024):
 
 def hash(m):
     # sha256 takes in binary, so we have to convert our int
+    # the commented out way is python3 compatible, the way we're using
+    # is python2 - this is the ONE LINE of the code that isn't cross-compatible :(
+    # m = m.to_bytes()
     m = bin(m)
     m = sha256(m).hexdigest()
     # now our m is a string that represents a hexadecimal number,
