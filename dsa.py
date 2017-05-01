@@ -19,7 +19,8 @@
 from hashlib import sha256
 from codecs import encode
 from random import getrandbits, randint
-from gmpy2 import is_prime
+#from gmpy2 import is_prime
+from miller_rabin import isPrime
 
 q = 251
 p = 503
@@ -28,12 +29,12 @@ g = 4
 def gen_param(N = 160, L = 1024):
 
     q = getrandbits(N)
-    while not(is_prime(q)):
+    while not(isPrime(q)):
         q = getrandbits(N)
 
     i = 2**L
     p = 0
-    while not(is_prime(p)):
+    while not(isPrime(p)):
         i += 1
         p = q*i + 1
 
